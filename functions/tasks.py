@@ -3,9 +3,9 @@ import asyncio
 
 from functions.general import (
     save_all_jsons,
-    load_json
+    load_json,
+    log_text
 )
-from _ import log_text
 from functions.twitch import (
     run_ad,
     send_message

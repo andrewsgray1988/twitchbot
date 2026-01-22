@@ -1,6 +1,6 @@
 import aiohttp
 
-from _ import log_text
+from functions.general import log_text
 from git_ignore.private_constants import (
     CLIENT_ID,
     OAUTH_TOKEN,
@@ -67,4 +67,18 @@ async def send_message(message):
 
     except Exception as e:
         log_text(f"send_message failed: {e}")
+        return False
+
+async def send_ttm_message(message):
+    try:
+        channel = bot.get_channel(TWITCH_CHANNEL)
+        if not channel:
+            log_text("send_ttm_message failed: channel not found.")
+            return False
+
+        await channel.send(message)
+        return True
+
+    except Exception as e:
+        log_text(f"send_ttm_message failed: {e}")
         return False

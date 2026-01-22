@@ -43,3 +43,10 @@ def log_text(message):
     full_path = os.path.join(log_dir, "error_log.txt")
     with open(full_path, "a", encoding="utf-8") as f:
         f.write(f"[{timestamp}]: {message}\n")
+
+def mod_log(message):
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    log_dir = os.path.join(BASE_DIR, JSON_DIR)
+    full_path = os.path.join(log_dir, "mod_log.txt")
+    with open(full_path, "a", encoding="utf-8") as f:
+        f.write(f"[{timestamp}]: {message}\n")

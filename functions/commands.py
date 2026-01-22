@@ -1,8 +1,8 @@
 import aiohttp
 
 from twitchio.ext import commands
-from _ import log_error
-from _ import get_channel_info
+from functions.general import log_text
+from functions.twitch import get_channel_info
 from general import (
     is_mod
 )
@@ -14,7 +14,7 @@ def setup_commands(bot: commands.Bot):
             info = await get_channel_info(target)
             if not info:
                 await ctx.send(f"Check out @{target}, for being a cool and awesome person!")
-                log_error(f"get_channel_info did not work for {target}.")
+                log_text(f"get_channel_info did not work for {target}.")
                 return
 
             game_name = info.get("game_name", "something awesome")
