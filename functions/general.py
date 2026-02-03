@@ -34,7 +34,6 @@ def start_tasks():
 
     config.TASK_FLAG = True
     asyncio.create_task(autosave_loop())
-    asyncio.create_task(auto_ads())
     asyncio.create_task(message_loops())
 
 def log_text(message):

@@ -4,10 +4,15 @@ from functions.general import log_text
 from git_ignore.private_constants import (
     CLIENT_ID,
     OAUTH_TOKEN,
-    ACCESS_TOKEN,
     BROADCASTER_ID,
     TWITCH_CHANNEL
 )
+
+_bot = None
+
+def init_bot(bot):
+    global _bot
+    _bot = bot
 
 async def get_channel_info(username: str):
     headers = {
@@ -34,28 +39,13 @@ async def get_channel_info(username: str):
                 return None
             return chan_data["data"][0]
 
-async def run_ad(duration: int):
-    url = "https://api.twitch.tv/helix/channels/commercial"
-    headers = {
-        "Authorization": f"Bearer {ACCESS_TOKEN}",
-        "Client-Id": CLIENT_ID,
-        "Content-Type": "application/json"
-    }
-    payload = {
-        "broadcaster_id": BROADCASTER_ID,
-        "length": duration
-    }
+async def send_message(message: str):
+    if _bot is None:
+        log_text("send_message failed: bot not initialized.")
+        return False
 
-    async with aiohttp.ClientSession() as session:
-        async with session.post(url, headers=headers, json=payload) as resp:
-            if resp.status != 200:
-                text = await resp.text()
-                log_text(f"Failed to start ads: {resp.status} - {text}")
-                return False
-    return True
+    bot = _bot
 
-
-async def send_message(message):
     try:
         channel = bot.get_channel(TWITCH_CHANNEL)
         if not channel:
@@ -69,16 +59,5 @@ async def send_message(message):
         log_text(f"send_message failed: {e}")
         return False
 
-async def send_ttm_message(message):
-    try:
-        channel = bot.get_channel(TWITCH_CHANNEL)
-        if not channel:
-            log_text("send_ttm_message failed: channel not found.")
-            return False
-
-        await channel.send(message)
-        return True
-
-    except Exception as e:
-        log_text(f"send_ttm_message failed: {e}")
-        return False
+async def send_ttm_message(message: str):
+    return await send_message(message)
